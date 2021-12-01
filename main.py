@@ -25,8 +25,7 @@ PRICES = {
 # Computes volume-weighted average price from websocket messages
 def compute_vwap(msg):
     if (
-        "type" in msg
-        and "product_id" in msg
+        "product_id" in msg
         and "price" in msg
         and msg["type"] == "match"
         and msg["product_id"] in WS_PAIRS
@@ -64,12 +63,16 @@ def on_open(ws):
 def on_message(ws, msg):
     logging.debug("msg received")
     msg = json.loads(msg)
-    try:
-        compute_vwap(msg)
-    except Exception as e:
-        logging.error(f"something went wrong: {e}")
-        # TODO: push to DLQ for further processing / analysis
-    finally:
+    if "type" in msg:
+        if msg["type"] == "error":
+            logging.error(f"something went wrong: {msg}")
+            # TODO: push to DLQ for further processing / analysis
+        else:
+            try:
+                compute_vwap(msg)
+            except Exception as e:
+                logging.error(f"something went wrong: {e}")
+                # TODO: push to DLQ for further processing / analysis
         logging.debug("msg processed")
 
 
