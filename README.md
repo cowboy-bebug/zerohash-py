@@ -1,3 +1,7 @@
+> 📢 Please check out my Go implementation as well: [cowboy-bebug/zerohash-go]([https://github.com/cowboy-bebug/zerohash-go])
+
+---
+
 ## To get started:
 
 Optionally set up and activate virtual env, install required dependencies and run `main.py`:
